@@ -1,4 +1,7 @@
+import os
+from glob import glob
 from setuptools import setup
+
 
 package_name = 'pi_gpio'
 
@@ -10,13 +13,14 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*')))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     author='H. Melih Erdogan',
     author_email='h.meliherdogan@gmail.com',
-    maintainer='H. Melih Erdogan',
-    maintainer_email='h.meliherdogan@gmail.com',
+    maintainer='Vincent Vandyck',
+    maintainer_email='vvandyck@robonautics.com',
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',

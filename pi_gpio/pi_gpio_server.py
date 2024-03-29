@@ -5,7 +5,8 @@ from rclpy.action import ActionServer, CancelResponse, GoalResponse
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
-from pi_gpio_interface.action import GPIO as GPIO_Action
+# from pi_gpio_interface.action import GPIO as GPIO_Action
+from mr_interfaces.action import GPIO as GPIO_Action
 import RPi.GPIO as GPIO
 
 class RaspberryPIGPIO():
