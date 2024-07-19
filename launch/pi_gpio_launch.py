@@ -5,7 +5,7 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='pi_gpio',
-            executable='pi_gpio_server',
+            executable='gpio_servers_node',
             name='pi_gpio_server'
         ),
     ])
