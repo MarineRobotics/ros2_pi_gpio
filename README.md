@@ -26,8 +26,9 @@ graph TD
 ```
 
 ## Features
-- Set GPIO pins high or low
-- Read the current state of GPIO pins
+- Set default GPIO pins high or low
+- Set GPIO pins on pcf8574 I2C expander high or low
+- Read the current state of GPIO pins and pcf8574 I2C expander pins
 - Configurable pin setup through a text file
 - Uses ROS2 action server for non-blocking operations
 
@@ -36,15 +37,35 @@ graph TD
 - Raspberry Pi with GPIO pins
 - RPi.GPIO Python library
 
-## Installation
-1. Clone this repository into your ROS2 workspace's `src` directory.
-2. Install dependencies:
+## Installation and Setup
+
+1. Clone this repository into your ROS2 workspace's `src` directory:
    ```
+   cd ~/ros2_ws/src
+   git clone https://github.com/your-username/pi_gpio.git
+   cd pi_gpio
+   ```
+
+2. Run the setup script to install custom dependencies:
+   ```
+   ./install-custom-rosdep.sh
+   ```
+   This script will install all required dependencies, including custom ones, without modifying system-wide rosdep files.
+
+3. Install standard ROS dependencies:
+   ```
+   cd ~/ros2_ws
    rosdep install --from-paths src --ignore-src -r -y
    ```
-3. Build the package:
+
+4. Build the package:
    ```
    colcon build --packages-select pi_gpio
+   ```
+
+5. Source the setup file:
+   ```
+   source ~/ros2_ws/install/setup.bash
    ```
 
 ## Usage

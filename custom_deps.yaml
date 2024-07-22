@@ -1,0 +1,4 @@
+adafruit-circuitpython-pcf8574:
+  ubuntu:
+    pip:
+      packages: [adafruit-circuitpython-pcf8574]

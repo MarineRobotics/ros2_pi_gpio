@@ -33,7 +33,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pi_gpio_server = ' + package_name + '.pi_gpio_server:main',
+            'pi_gpio_servers = ' + package_name + 'gpio_servers_node.:main',
         ],
     },
 )
