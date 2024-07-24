@@ -1,4 +1,5 @@
-0,in
-1,in
-2,in
-3,in
+0,in,/joystick/down
+1,in,/joystick/right
+2,in,/joystick/left
+3,in,/joystick/up
+4,in,/joystick/select

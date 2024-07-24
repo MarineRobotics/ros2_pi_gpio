@@ -7,6 +7,7 @@ from std_msgs.msg import Bool
 from mr_interfaces.action import GPIO
 import board
 import adafruit_pcf8574
+import digitalio
 import time
 
 class PCF8574IO(Node):
@@ -20,19 +21,18 @@ class PCF8574IO(Node):
         # Read configuration
         self.input_pins, self.output_pins = self.read_config(config_file)
         
-        # Set up input pins
-        for pin in self.input_pins:
-            self.pcf.get_pin(pin).switch_to_input(pull=adafruit_pcf8574.Pull.UP)
+        # Set up input pins and create publishers
+        self.pin_publishers = {}
+        
+        for pin, topic in self.input_pins.items():
+            pin_obj = self.pcf.get_pin(pin)
+            pin_obj.switch_to_input(pull=digitalio.Pull.UP)
+            self.pin_publishers[pin] = self.create_publisher(Bool, f'{topic}', 1)
         
         # Set up output pins
         for pin in self.output_pins:
-            self.pcf.get_pin(pin).switch_to_output(value=False)
-        
-        # Create publishers for each input pin
-        self.publishers = {
-            pin: self.create_publisher(Bool, f'pin_state_{pin}', 10)
-            for pin in self.input_pins
-        }
+            pin_obj = self.pcf.get_pin(pin)
+            pin_obj.switch_to_output(value=False)
         
         # Create a timer that calls the publish_pin_states method 10 times per second
         self.create_timer(0.1, self.publish_pin_states)
@@ -46,16 +46,17 @@ class PCF8574IO(Node):
             callback_group=ReentrantCallbackGroup())
 
     def read_config(self, config_file):
-        input_pins = []
+        input_pins = {}
         output_pins = []
         try:
             with open(config_file, 'r') as f:
                 for line in f:
-                    pin, pin_type = line.strip().split(',')
+                    pin, pin_type, topic = line.strip().split(',')
                     pin = int(pin)
-                    if pin_type.lower() == 'input':
-                        input_pins.append(pin)
-                    elif pin_type.lower() == 'output':
+                    if pin_type.lower() in ['input', 'in']:
+                        # Add topic and pin to input pin dictionary
+                        input_pins[pin] = topic
+                    elif pin_type.lower() in ['output', 'out']:
                         output_pins.append(pin)
                     else:
                         self.get_logger().warn(f'Invalid pin type {pin_type} for pin {pin}')
@@ -66,8 +67,9 @@ class PCF8574IO(Node):
 
     def publish_pin_states(self):
         for pin in self.input_pins:
-            state = not self.pcf.get_pin(pin).value  # Invert because input is pulled up
-            self.publishers[pin].publish(Bool(data=state))
+            pin_obj = self.pcf.get_pin(pin)
+            state = not pin_obj.value  # Invert because input is pulled up
+            self.pin_publishers[pin].publish(Bool(data=state))
 
     def execute_callback(self, goal_handle):
         request = goal_handle.request

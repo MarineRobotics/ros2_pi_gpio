@@ -13,7 +13,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*')))
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+        (os.path.join('share', package_name, 'resource'), glob(os.path.join('resource', '*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -33,7 +34,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pi_gpio_servers = ' + package_name + 'gpio_servers_node.:main',
+            'builtin_gpio_server = pi_gpio.builtin_gpio_node:main',
+            'pcf8574_gpio_server = pi_gpio.pcf8574_gpio_server_node:main',
         ],
     },
 )
