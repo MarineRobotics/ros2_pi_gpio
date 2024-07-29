@@ -8,19 +8,21 @@ from .base_gpio_action_server import BaseGPIOActionServer
 class BuiltinGPIOActionServer(BaseGPIOActionServer):
     def __init__(self, config_file="builtin_gpio_config.txt"):
         super().__init__('pi_gpio_server', 'pi_gpio_server', config_file)
+        # TODO: change to launch file
+
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         self.pin_publishers = {}
         self.setup_pins()
         
         # Create a timer that calls the publish_pin_states method 10 times per second
-        self.create_timer(0.1, self.publish_pin_states)
+        self.create_timer(0.5, self.publish_pin_states)
 
     def setup_pin(self, pin_id, pin_type):
         pin_id = int(pin_id)
         if pin_type == "in":
             GPIO.setup(pin_id, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-            self.pin_publishers[pin_id] = self.create_publisher(Bool, f'pin_state_{pin_id}', 1)
+            self.pin_publishers[pin_id] = self.create_publisher(Bool, f'gpio_{pin_id}', 1)
         elif pin_type == "out":
             GPIO.setup(pin_id, GPIO.OUT)
         self.pin_types[pin_id] = pin_type

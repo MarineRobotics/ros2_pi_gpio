@@ -1,8 +1,9 @@
 import board
 import adafruit_pcf8574
 import digitalio
-from mr_interfaces.action import GPIO as GPIO_ACTION
-from .base_gpio_action_server import BaseGPIOActionServer
+from mr_interfaces.action import GPIO as GPIO
+from std_msgs.msg import Bool
+from pi_gpio.base_gpio_action_server import BaseGPIOActionServer
 
 class PCF8574IO(BaseGPIOActionServer):
     def __init__(self, config_file="pcf8574_config.txt"):
@@ -11,6 +12,10 @@ class PCF8574IO(BaseGPIOActionServer):
         # Initialize I2C and PCF8574
         i2c = board.I2C()
         self.pcf = adafruit_pcf8574.PCF8574(i2c)
+        
+        self.pin_publishers = {}
+        self.input_pins = []
+        self.output_pins = []
         
         self.setup_pins()
         
@@ -23,45 +28,40 @@ class PCF8574IO(BaseGPIOActionServer):
         
         if pin_type == "in":
             pin_obj.switch_to_input(pull=digitalio.Pull.UP)
-            self.pin_publishers[pin_id] = self.create_publisher(GPIO_ACTION, f'external_gpio_{pin_id}', 1)
+            self.pin_publishers[pin_id] = self.create_publisher(Bool, f'external_gpio_{pin_id}', 1)
+            self.input_pins.append(pin_id)
         elif pin_type == "out":
             pin_obj.switch_to_output(value=False)
+            self.output_pins.append(pin_id)
         
         self.pin_types[pin_id] = pin_type
 
     def publish_pin_states(self):
-        for pin_id, pin_type in self.pin_types.items():
-            if pin_type == "in":
-                pin_obj = self.pcf.get_pin(pin_id)
-                state = not pin_obj.value  # Invert because input is pulled up
-                msg = GPIO_ACTION()
-                msg.gpio = f"{pin_id},{int(state)}"
-                self.pin_publishers[pin_id].publish(msg)
+        for pin_id in self.input_pins:
+            pin_obj = self.pcf.get_pin(pin_id)
+            state = not pin_obj.value  # Invert because input is pulled up
+            self.pin_publishers[pin_id].publish(Bool(data=state))
 
     def perform_gpio_action(self, pin_id, action_type):
         pin_id = int(pin_id)
-        result = GPIO_ACTION.Result()
 
-        if pin_id not in self.pin_types or self.pin_types[pin_id] != "out":
+        if pin_id not in self.output_pins:
             self.get_logger().warn(f'Invalid output pin {pin_id}')
-            result.value = -1
-            return result
+            return -1
 
         pin = self.pcf.get_pin(pin_id)
 
         if action_type == "high":
             pin.value = True
-            result.value = 1
+            return 1
         elif action_type == "low":
             pin.value = False
-            result.value = 0
+            return 0
         elif action_type == "read":
-            result.value = int(not pin.value)  # Invert the value for consistency with input pins
+            return int(not pin.value)  # Invert the value for consistency with input pins
         else:
             self.get_logger().warn(f'Invalid action {action_type} for pin {pin_id}')
-            result.value = -1
-
-        return result.value  # Return just the value, not the whole result object
+            return -1 
 
     def destroy(self):
         # Perform any necessary cleanup
