@@ -12,6 +12,8 @@
 
   <depend>mr_interfaces</depend>
   <exec_depend>rclpy</exec_depend>
+  <exec_depend>adafruit-circuitpython-pcf8574</exec_depend>
+  <exec_depend>python-rpi.gpio-pip</exec_depend>
 
   <!-- These test dependencies are optional
   Their purpose is to make sure that the code passes the linters -->
