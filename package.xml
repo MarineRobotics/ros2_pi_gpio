@@ -10,8 +10,10 @@
 
   <author email="h.meliherdogan@gmail.com">H. Melih Erdogan</author>
 
-  <depend>mr_interfaces</depend>
-  <exec_depend>rclpy</exec_depend>
+  <depend>rclpy</depend>
+
+
+  <exec_depend>mr_interfaces</exec_depend>
   <exec_depend>adafruit-circuitpython-pcf8574</exec_depend>
   <exec_depend>python-rpi.gpio-pip</exec_depend>
 
