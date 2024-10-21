@@ -30,12 +30,14 @@ class BuiltinGPIOActionServer(BaseGPIOActionServer):
     def publish_pin_states(self):
         for pin_id, pin_type in self.pin_types.items():
             if pin_type == "in":
+                # Log that we are publish for pin in blue
                 state = GPIO.input(pin_id)
                 self.pin_publishers[pin_id].publish(Bool(data=bool(state)))
 
     def perform_gpio_action(self, pin_id, action_type):
         result = GPIO_Action.Result()
         pin_id = int(pin_id)
+        self.get_logger().info(f'Performing action {action_type} on pin {pin_id}')
 
         if pin_id not in self.pin_types or self.pin_types[pin_id] != "out":
             self.get_logger().warn(f'Invalid output pin {pin_id}')
@@ -43,12 +45,16 @@ class BuiltinGPIOActionServer(BaseGPIOActionServer):
             return result.value
 
         if action_type == "high":
+            self.get_logger().info(f'Setting pin {pin_id} to high')
             GPIO.output(pin_id, GPIO.HIGH)
             result.value = 1
         elif action_type == "low":
+            self.get_logger().info(f'Setting pin {pin_id} to low')
             GPIO.output(pin_id, GPIO.LOW)
+            self.get_logger().info(f'Pin {pin_id} set to low ===============')
             result.value = 0
         elif action_type == "read":
+            self.get_logger().info(f'Reading pin {pin_id}')
             result.value = GPIO.input(pin_id)
         else:
             self.get_logger().warn(f'Invalid action {action_type} for pin {pin_id}')
