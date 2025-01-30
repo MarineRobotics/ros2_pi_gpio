@@ -76,10 +76,15 @@ class BaseGPIOActionServer(Node):
 
         # This is where perform_gpio_action is called
         result.value = self.perform_gpio_action(pin_id, action_type)
+        # log that it's done in red
+        self.get_logger().info(f'\033[91mDone with action {action_type} on pin {pin_id}\033[0m')
 
         # Publish feedback (optional)
         feedback_msg.feedback = 1  # You can customize this
+        self.get_logger().info('Publishing feedback...')
         goal_handle.publish_feedback(feedback_msg)
-
+        self.get_logger().info('Feedback published')
         goal_handle.succeed()
+        self.get_logger().info('Goal succeeded')
+        self.get_logger().info(f'Result: {result.value}')
         return result
