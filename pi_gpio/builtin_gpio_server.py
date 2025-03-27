@@ -21,9 +21,15 @@ class BuiltinGPIOServer(BaseGPIOServer):
         super().__init__('gpio_server', config_file)
         
         # Initialize RPi.GPIO
+        self.get_logger().info('Initializing RPi.GPIO...')
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         self.get_logger().info('RPi.GPIO initialized in BCM mode')
+
+        # Setup pins and create timer for publishing input states
+        # polling rate and publish_pin_states are defined in the base class
+        self.setup_pins()
+        self.create_timer(1.0/self.polling_rate, self.publish_pin_states)
     
     def setup_pin(self, pin_id, pin_type):
         """
@@ -75,6 +81,9 @@ class BuiltinGPIOServer(BaseGPIOServer):
             
             # RPi.GPIO allows reading both input and output pins
             value = GPIO.input(pin_id)
+            # self.get_logger().debug(f'Reading pin {pin_id}, value={value}', throttle_duration_sec=1)
+            # print in green if 1 and red if 0
+            # self.get_logger().info(f'Pin {pin_id} is {"HIGH" if value else "LOW"}', throttle_duration_sec=1)
             return 1 if value else 0
         
         except Exception as e:

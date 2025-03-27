@@ -9,7 +9,7 @@ def main(args=None):
     # Get configuration file path
     package_share_dir = get_package_share_directory('pi_gpio')
     resource_dir = os.path.join(package_share_dir, 'resource')
-    builtin_config = os.path.join(resource_dir, 'io_config.txt')
+    builtin_config = os.path.join(resource_dir, 'io_config.yaml')
 
     try:
         # Create the Raspberry Pi GPIO server node

@@ -66,8 +66,8 @@ class BaseGPIOServer(Node):
         self.polling_rate = self.get_parameter('polling_rate').value
         
         # Setup pins and create timer for publishing input states
-        self.setup_pins()
-        self.create_timer(1.0/self.polling_rate, self.publish_pin_states)
+        # self.setup_pins()
+        # self.create_timer(1.0/self.polling_rate, self.publish_pin_states)
         
         self.get_logger().info(f'{node_name} initialized successfully')
     
@@ -141,13 +141,20 @@ class BaseGPIOServer(Node):
         Publish the current state of all input pins.
         This is called periodically by the timer.
         """
+        # log input pins every second
+        # self.get_logger().debug(f'Input pins: {self.input_pins}', throttle_duration_sec=1)
+        # log pin states every second
+        # self.get_logger().debug(f'Pin states: {self.pin_states}', throttle_duration_sec=1)
         for pin_id in self.input_pins:
             state = self.read_pin(pin_id)
+            # Print pin id and state throttled once every 5 seconds
+            # self.get_logger().debug(f'Pin {pin_id} state: {state}', throttle_duration_sec=5)
             # Only publish if the state has changed or we haven't published before
             if pin_id not in self.pin_states or self.pin_states[pin_id] != state:
                 self.pin_states[pin_id] = state
                 # Convert to boolean for publishing
                 bool_state = bool(state) if state >= 0 else False
+                # self.get_logger().debug(f'Publishing pin {pin_id} state: {bool_state}')
                 self.pin_publishers[pin_id].publish(Bool(data=bool_state))
     
     def set_gpio_callback(self, request, response):

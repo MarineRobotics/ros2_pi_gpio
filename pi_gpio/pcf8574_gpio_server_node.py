@@ -1,5 +1,5 @@
 import rclpy
-from pi_gpio.pcf8574_gpio_server import PCF8574IO
+from pi_gpio.pcf8574_gpio_server import PCF8574Server
 from ament_index_python.packages import get_package_share_directory
 import os
 

@@ -33,6 +33,11 @@ class PCF8574Server(BaseGPIOServer):
             rclpy.shutdown()
             raise
     
+        # Setup pins and create timer for publishing input states
+        # polling rate and publish_pin_states are defined in the base class
+        self.setup_pins()
+        self.create_timer(1.0/self.polling_rate, self.publish_pin_states)
+ 
     def setup_pin(self, pin_id, pin_type):
         """
         Configure a PCF8574 pin as input or output.
@@ -78,6 +83,7 @@ class PCF8574Server(BaseGPIOServer):
         pin_id = int(pin_id)
         try:
             pin_obj = self.pcf.get_pin(pin_id)
+            # self.get_logger().debug(f'Reading pin {pin_id}, value={pin_obj.value}', throttle_duration_sec=1)
             # For input pins, we invert the value because of pull-up resistors
             if pin_id in self.input_pins:
                 return 1 if not pin_obj.value else 0
