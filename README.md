@@ -1,5 +1,17 @@
 # Pi GPIO ROS Node
 
+## Table of Contents
+- [Overview](#overview)
+- [Node Flowchart](#node-flowchart)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation and Setup](#installation-and-setup)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [ROS2 Interfaces](#ros2-interfaces)
+- [License](#license)
+- [Contributors](#contributors)
+
 ## Overview
 This ROS2 node provides an interface to control and read GPIO pins on a Raspberry Pi. It supports two implementations:
 - **BuiltinGPIOServer** which uses the Raspberry Pi’s built-in GPIO with the RPi.GPIO library
