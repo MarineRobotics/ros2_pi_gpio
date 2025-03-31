@@ -1,0 +1,86 @@
+---
+# Raspberry Pi GPIO Configuration
+pins:
+  - pin: 4
+    type: "out"
+    description: "Heartbeat indicator"
+
+  - pin: 14
+    type: "in"
+    description: "Pixhawk relay feedback"
+
+  - pin: 15
+    type: "out"
+    description: "N2K network relay control"
+
+  - pin: 17
+    type: "out"
+    description: "Motor controller relay control"
+
+  - pin: 27
+    type: "out"
+    description: "Ethernet switch relay control"
+
+  - pin: 22
+    type: "out"
+    description: "PoE injector relay control"
+
+  - pin: 23
+    type: "out"
+    description: "LTE modem relay control"
+
+  - pin: 10
+    type: "in"
+    description: "Motor controller relay feedback"
+
+  - pin: 9
+    type: "in"
+    description: "N2K network relay feedback"
+
+  - pin: 25
+    type: "in"
+    description: "Ethernet switch relay feedback"
+
+  - pin: 11
+    type: "in"
+    description: "PoE injector relay feedback"
+
+  - pin: 8
+    type: "out"
+    description: "Emergency stop set"
+
+  - pin: 7
+    type: "out"
+    description: "Emergency stop reset"
+
+  - pin: 0
+    type: "out"
+    description: "Spare relay control"
+
+  - pin: 1
+    type: "in"
+    description: "LTE modem relay feedback"
+
+  - pin: 5
+    type: "out"
+    description: "Alarm state indicator"
+
+  - pin: 6
+    type: "in"
+    description: "Emergency stop state feedback"
+
+  - pin: 12
+    type: "out"
+    description: "Pixhawk relay control"
+
+  - pin: 13
+    type: "out"
+    description: "Navigation light control"
+
+  - pin: 16
+    type: "in"
+    description: "RC control active indicator"
+
+  - pin: 26
+    type: "out"
+    description: "Backseat Pi reset"
