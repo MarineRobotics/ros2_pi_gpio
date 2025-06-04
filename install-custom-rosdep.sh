@@ -34,24 +34,4 @@ echo "yaml file://${CUSTOM_YAML}" > "$CUSTOM_SOURCE_LIST"
 # Add the custom source to rosdep
 run_privileged cp "$CUSTOM_SOURCE_LIST" /etc/ros/rosdep/sources.list.d/
 
-# Update rosdep database
-if ! rosdep update --include-eol-distros; then
-    echo "Failed to update rosdep database"
-    run_privileged rm /etc/ros/rosdep/sources.list.d/99-custom-deps.list
-    rm -rf "$TEMP_DIR"
-    exit 1
-fi
 
-# Install dependencies using the custom source
-if ! rosdep install --as-root pip:false --from-paths "${SCRIPT_DIR}" --ignore-src -r -y --rosdistro=humble; then
-    echo "Failed to install dependencies"
-    run_privileged rm /etc/ros/rosdep/sources.list.d/99-custom-deps.list
-    rm -rf "$TEMP_DIR"
-    exit 1
-fi
-
-# Clean up
-run_privileged rm /etc/ros/rosdep/sources.list.d/99-custom-deps.list
-rm -rf "$TEMP_DIR"
-
-echo "Custom dependencies have been installed successfully."
