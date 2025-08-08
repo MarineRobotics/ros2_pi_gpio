@@ -32,7 +32,7 @@ if ! rosdep update --include-eol-distros; then
 fi
 
 # Install dependencies using the custom source
-if ! rosdep install --as-root pip:false --from-paths "${SCRIPT_DIR}" --ignore-src -r -y --rosdistro=humble; then
+if ! rosdep install --as-root pip:false --from-paths "${SCRIPT_DIR}" --ignore-src -r -y --rosdistro=$ROS_DISTRO; then
     echo "Failed to install dependencies"
     sudo rm /etc/ros/rosdep/sources.list.d/99-custom-deps.list
     rm -rf "$TEMP_DIR"
