@@ -29,7 +29,7 @@ class BuiltinGPIOServer(BaseGPIOServer):
         # Setup pins and create timer for publishing input states
         # polling rate and publish_pin_states are defined in the base class
         self.setup_pins()
-        self.create_timer(1.0/self.polling_rate, self.publish_pin_states)
+        self.create_timer(5.0/self.polling_rate, self.publish_pin_states)
     
     def setup_pin(self, pin_id, pin_type):
         """

@@ -34,4 +34,3 @@ echo "yaml file://${CUSTOM_YAML}" > "$CUSTOM_SOURCE_LIST"
 # Add the custom source to rosdep
 run_privileged cp "$CUSTOM_SOURCE_LIST" /etc/ros/rosdep/sources.list.d/
 
-

@@ -149,13 +149,14 @@ class BaseGPIOServer(Node):
             state = self.read_pin(pin_id)
             # Print pin id and state throttled once every 5 seconds
             # self.get_logger().debug(f'Pin {pin_id} state: {state}', throttle_duration_sec=5)
-            # Only publish if the state has changed or we haven't published before
-            if pin_id not in self.pin_states or self.pin_states[pin_id] != state:
-                self.pin_states[pin_id] = state
-                # Convert to boolean for publishing
-                bool_state = bool(state) if state >= 0 else False
-                # self.get_logger().debug(f'Publishing pin {pin_id} state: {bool_state}')
-                self.pin_publishers[pin_id].publish(Bool(data=bool_state))
+                # Only publish if the state has changed or we haven't published before
+                # TODO: we've disabled this. Seems to be a better idea to publish all at a slow interval
+                # if pin_id not in self.pin_states or self.pin_states[pin_id] != state:
+            self.pin_states[pin_id] = state
+            # Convert to boolean for publishing
+            bool_state = bool(state) if state >= 0 else False
+            # self.get_logger().debug(f'Publishing pin {pin_id} state: {bool_state}')
+            self.pin_publishers[pin_id].publish(Bool(data=bool_state))
     
     def set_gpio_callback(self, request, response):
         """
@@ -171,7 +172,7 @@ class BaseGPIOServer(Node):
         pin_id = int(request.pin_id)
         value = bool(request.value)
         
-        self.get_logger().info(f'Setting pin {pin_id} to {value}')
+        self.get_logger().debug(f'Setting pin {pin_id} to {value}')
         
         if pin_id not in self.output_pins:
             response.success = False
@@ -201,7 +202,7 @@ class BaseGPIOServer(Node):
             response: Service response with value, success flag, and message
         """
         pin_id = int(request.pin_id)
-        self.get_logger().info(f'Reading pin {pin_id}')
+        self.get_logger().debug(f'Reading pin {pin_id}')
         
         if pin_id not in self.input_pins and pin_id not in self.output_pins:
             response.success = False
