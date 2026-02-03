@@ -6,7 +6,7 @@
   <description>ROS2 action server to control Raspberry Pi GPIO</description>
 
   <maintainer email="vvandyck@robonautics.com">Vincent Vandyck</maintainer>
-  <license>Apache License 2.0</license>
+  <license>Apache-2.0</license>
 
   <author email="h.meliherdogan@gmail.com">H. Melih Erdogan</author>
 
