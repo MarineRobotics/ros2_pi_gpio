@@ -4,6 +4,11 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 def main(args=None):
+    try:
+        import setproctitle
+        setproctitle.setproctitle('pcf8574_gpio_server')
+    except ImportError:
+        pass
     rclpy.init(args=args)
     
     # Get configuration file path

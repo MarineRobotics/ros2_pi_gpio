@@ -16,7 +16,7 @@ setup(
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
         (os.path.join('share', package_name, 'resource'), glob(os.path.join('resource', '*'))),
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools', 'setproctitle'],
     zip_safe=True,
     author='H. Melih Erdogan',
     author_email='h.meliherdogan@gmail.com',
